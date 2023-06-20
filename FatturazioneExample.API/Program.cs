@@ -1,5 +1,7 @@
 
 using FatturazioneExample.Data.Data;
+using FatturazioneExample.Services.CustomerService;
+using FatturazioneExample.Services.ProductService;
 using Microsoft.EntityFrameworkCore;
 
 namespace FatturazioneExample.API
@@ -17,7 +19,11 @@ namespace FatturazioneExample.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            //var builder = WebApplication.CreateBuilder(args);
+            // Injecting ModelServices
+            builder.Services.AddTransient<ICustomerService, CustomerService>();
+            builder.Services.AddTransient<IProductService, ProductService>();
+
+            // Injecting data context
             var configuration = builder.Configuration;
             var connectionString = configuration.GetConnectionString("SQLiteDB");
             builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(connectionString));

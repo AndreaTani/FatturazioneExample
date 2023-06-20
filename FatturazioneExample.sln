@@ -5,9 +5,11 @@ VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FatturazioneExample.API", "FatturazioneExample.API\FatturazioneExample.API.csproj", "{2AE940D2-47AB-4D0B-AEF4-F8E68C7AF3CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FatturazioneExample.Data", "FatturazioneExample.Data\FatturazioneExample.Data.csproj", "{A6F53BBE-06A3-4270-A003-F60013BAB036}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FatturazioneExample.Data", "FatturazioneExample.Data\FatturazioneExample.Data.csproj", "{A6F53BBE-06A3-4270-A003-F60013BAB036}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FatturazioneExample.Test", "FatturazioneExample.Test\FatturazioneExample.Test.csproj", "{82541149-7ED7-422F-B148-E93E7FFC387D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FatturazioneExample.Test", "FatturazioneExample.Test\FatturazioneExample.Test.csproj", "{82541149-7ED7-422F-B148-E93E7FFC387D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FatturazioneExample.Services", "FatturazioneExample.Services\FatturazioneExample.Services.csproj", "{44668797-5DA1-4C1E-A792-B89F7625B559}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{82541149-7ED7-422F-B148-E93E7FFC387D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82541149-7ED7-422F-B148-E93E7FFC387D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82541149-7ED7-422F-B148-E93E7FFC387D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44668797-5DA1-4C1E-A792-B89F7625B559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44668797-5DA1-4C1E-A792-B89F7625B559}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44668797-5DA1-4C1E-A792-B89F7625B559}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44668797-5DA1-4C1E-A792-B89F7625B559}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

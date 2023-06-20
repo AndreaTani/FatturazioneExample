@@ -1,7 +1,6 @@
-﻿using FatturazioneExample.Data.Data;
-using FatturazioneExample.Data.Models;
+﻿using FatturazioneExample.Data.Models;
+using FatturazioneExample.Services.CustomerService;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace FatturazioneExample.API.Controllers
 {
@@ -9,75 +8,57 @@ namespace FatturazioneExample.API.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly ICustomerService _customerService;
 
-        public CustomerController(DataContext context)
+        public CustomerController(ICustomerService customerService)
         {
-            _context = context;
+            _customerService = customerService;
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddCustomer(Customer customer)
+        public ActionResult AddCustomer(Customer customer)
         {
-            _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
-
+            _customerService.AddCustomer(customer);
             return Ok();
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Customer>>> GetAllCustomers()
+        public ActionResult<List<Customer>> GetAllCustomers()
         {
-            return Ok(await  _context.Customers.ToArrayAsync());
+            var customers = _customerService.GetAllCustomers();
+            if (customers is null)
+            {
+                return NotFound("Customers not found");
+            }
+            return Ok(customers);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        public ActionResult<Customer> GetCustomer(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if(customer == null)
+            var customer = _customerService.GetCustomer(id);
+            if (customer is null)
             {
-                return BadRequest("Customer not found!");
+                return NotFound("Customers not found");
             }
             return Ok(customer);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Customer>> UpdateCustomer(int id, Customer request)
+        [HttpPut]
+        public ActionResult<Customer> UpdateCustomer(Customer request)
         {
-            var customer = await _context.Customers.FindAsync(id);
-
-            if (customer == null)
+            var customer = _customerService.UpdateCustomer(request);
+            if (customer is null)
             {
-                return BadRequest("Customer not found!");
+                return NotFound("Customers not found");
             }
-
-            if (id != request.Id)
-            {
-                return BadRequest("Data mismatch!");
-            }
-
-            customer.Name = request.Name;
-            customer.Address = request.Address;
-
-            _context.Customers.Update(customer);
-            await _context.SaveChangesAsync();
-
             return Ok(customer);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCustomer(int id)
+        public ActionResult DeleteCustomer(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
-            {
-                return BadRequest("Customer not found!");
-            }
-            _context.Customers.Remove(customer);
-
-            await _context.SaveChangesAsync();
-
+            _customerService.DeleteCustomer(id);
             return Ok();
         }
 

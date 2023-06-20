@@ -1,7 +1,6 @@
-﻿using FatturazioneExample.Data.Data;
-using FatturazioneExample.Data.Models;
+﻿using FatturazioneExample.Data.Models;
+using FatturazioneExample.Services.ProductService;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace FatturazioneExample.API.Controllers
 {
@@ -9,75 +8,58 @@ namespace FatturazioneExample.API.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IProductService _productService;
 
-        public ProductController(DataContext context)
+        public ProductController(IProductService productService)
         {
-            _context = context;
+            _productService = productService;
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddProduct(Product product)
+        public ActionResult AddProduct(Product product)
         {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
+            _productService.AddProduct(product);
             return Ok();
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetAllProducts()
+        public ActionResult<List<Product>> GetAllProducts()
         {
-            return Ok(await _context.Products.ToArrayAsync());
+            var products = _productService.GetAllProducts();
+            if (products is null)
+            {
+                return NotFound("Products not dound");
+            }
+            return Ok(products);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public ActionResult<Product> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            var product = _productService.GetProduct(id);
+            if (product is null)
             {
                 return BadRequest("Product not found!");
             }
             return Ok(product);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Product>> UpdateProduct(int id, Product request)
+        [HttpPut]
+        public ActionResult<Product> UpdateProduct(Product request)
         {
-            var product = await _context.Products.FindAsync(id);
-
+            var product = _productService.UpdateProduct(request);
             if (product == null)
             {
                 return BadRequest("Product not found!");
             }
-
-            if (id != request.Id)
-            {
-                return BadRequest("Data mismatch!");
-            }
-
-            product.Name = request.Name;
-            product.Price = request.Price;
-
-            _context.Products.Update(product);
-            await _context.SaveChangesAsync();
 
             return Ok(product);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteProduct(int id)
+        public ActionResult DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-            {
-                return BadRequest("Product not found!");
-            }
-            _context.Products.Remove(product);
-
-            await _context.SaveChangesAsync();
-
+            _productService.DeleteProduct(id);
             return Ok();
         }
     }
