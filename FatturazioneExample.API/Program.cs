@@ -1,6 +1,7 @@
 
 using FatturazioneExample.Data.Data;
 using FatturazioneExample.Services.CustomerService;
+using FatturazioneExample.Services.InvoiceService;
 using FatturazioneExample.Services.ProductService;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,7 @@ namespace FatturazioneExample.API
             // Injecting ModelServices
             builder.Services.AddTransient<ICustomerService, CustomerService>();
             builder.Services.AddTransient<IProductService, ProductService>();
+            builder.Services.AddTransient<IInvoiceService, InvoiceService>();
 
             // Injecting data context
             var configuration = builder.Configuration;

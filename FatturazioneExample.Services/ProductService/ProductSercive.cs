@@ -15,7 +15,7 @@ namespace FatturazioneExample.Services.ProductService
         public void AddProduct(Product product)
         {
             _context.Products.Add(product);
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public void DeleteProduct(int id)
@@ -27,7 +27,7 @@ namespace FatturazioneExample.Services.ProductService
             }
             _context.Products.Remove(product);
 
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public List<Product> GetAllProducts()
@@ -58,7 +58,7 @@ namespace FatturazioneExample.Services.ProductService
             product.Price = request.Price;
 
             _context.Products.Update(product);
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             return product;
         }

@@ -3,6 +3,7 @@ using System;
 using FatturazioneExample.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FatturazioneExample.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230621103244_invoicesRelations")]
+    partial class invoicesRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.7");
@@ -33,7 +36,7 @@ namespace FatturazioneExample.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("FatturazioneExample.Data.Models.Invoice", b =>
@@ -55,7 +58,7 @@ namespace FatturazioneExample.Data.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Invoices", (string)null);
+                    b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("FatturazioneExample.Data.Models.Product", b =>
@@ -73,7 +76,7 @@ namespace FatturazioneExample.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("InvoiceProduct", b =>
@@ -88,7 +91,7 @@ namespace FatturazioneExample.Data.Migrations
 
                     b.HasIndex("ProductsId");
 
-                    b.ToTable("InvoiceProduct", (string)null);
+                    b.ToTable("InvoiceProduct");
                 });
 
             modelBuilder.Entity("FatturazioneExample.Data.Models.Invoice", b =>

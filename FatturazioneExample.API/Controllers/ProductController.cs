@@ -28,7 +28,7 @@ namespace FatturazioneExample.API.Controllers
             var products = _productService.GetAllProducts();
             if (products is null)
             {
-                return NotFound("Products not dound");
+                return NotFound("Products not found");
             }
             return Ok(products);
         }
@@ -39,7 +39,7 @@ namespace FatturazioneExample.API.Controllers
             var product = _productService.GetProduct(id);
             if (product is null)
             {
-                return BadRequest("Product not found!");
+                return NotFound("Product not found!");
             }
             return Ok(product);
         }
@@ -50,7 +50,7 @@ namespace FatturazioneExample.API.Controllers
             var product = _productService.UpdateProduct(request);
             if (product == null)
             {
-                return BadRequest("Product not found!");
+                return NotFound("Product not found!");
             }
 
             return Ok(product);

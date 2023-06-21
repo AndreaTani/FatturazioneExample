@@ -5,8 +5,11 @@
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public bool HasBeenPaid { get; set; }
-        public Customer Customer { get; set; } = new Customer();
-        public List<Product> Products { get; set; } = new List<Product>();
+        public List<Product> Products { get; set; }
+        
+        
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
 
     }
 }

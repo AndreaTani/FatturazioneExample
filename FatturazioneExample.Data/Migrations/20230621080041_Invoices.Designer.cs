@@ -3,6 +3,7 @@ using System;
 using FatturazioneExample.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FatturazioneExample.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230621080041_Invoices")]
+    partial class Invoices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.7");
@@ -33,7 +36,7 @@ namespace FatturazioneExample.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("FatturazioneExample.Data.Models.Invoice", b =>
@@ -55,13 +58,16 @@ namespace FatturazioneExample.Data.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Invoices", (string)null);
+                    b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("FatturazioneExample.Data.Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("InvoiceId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -73,28 +79,15 @@ namespace FatturazioneExample.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
-                });
+                    b.HasIndex("InvoiceId");
 
-            modelBuilder.Entity("InvoiceProduct", b =>
-                {
-                    b.Property<int>("InvoicesId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("InvoicesId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("InvoiceProduct", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("FatturazioneExample.Data.Models.Invoice", b =>
                 {
                     b.HasOne("FatturazioneExample.Data.Models.Customer", "Customer")
-                        .WithMany("Invoices")
+                        .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -102,24 +95,16 @@ namespace FatturazioneExample.Data.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("InvoiceProduct", b =>
+            modelBuilder.Entity("FatturazioneExample.Data.Models.Product", b =>
                 {
                     b.HasOne("FatturazioneExample.Data.Models.Invoice", null)
-                        .WithMany()
-                        .HasForeignKey("InvoicesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FatturazioneExample.Data.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Products")
+                        .HasForeignKey("InvoiceId");
                 });
 
-            modelBuilder.Entity("FatturazioneExample.Data.Models.Customer", b =>
+            modelBuilder.Entity("FatturazioneExample.Data.Models.Invoice", b =>
                 {
-                    b.Navigation("Invoices");
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
