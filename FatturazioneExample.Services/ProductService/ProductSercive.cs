@@ -20,24 +20,35 @@ namespace FatturazioneExample.Services.ProductService
 
         public void DeleteProduct(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = _context.Products
+                .Where(p => p.IsDeleted == false)
+                .FirstOrDefault(p => p.Id == id);
+
             if (product is null)
             {
                 throw new Exception("Product not found!");
             }
-            _context.Products.Remove(product);
 
+            product.IsDeleted = true;
+            product.DeletionDate = DateTime.Now;
+
+            _context.Products.Update(product);
             _context.SaveChanges();
         }
 
         public List<Product> GetAllProducts()
         {
-            return _context.Products.ToList();
+            return _context.Products
+                .Where(p => p.IsDeleted == false)
+                .ToList();
         }
 
         public Product GetProduct(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = _context.Products
+                .Where(p => p.IsDeleted == false)
+                .FirstOrDefault(p => p.Id == id);
+
             if (product == null)
             {
                 throw new Exception("Product not found!");
@@ -47,7 +58,9 @@ namespace FatturazioneExample.Services.ProductService
 
         public Product UpdateProduct(Product request)
         {
-            var product = _context.Products.Find(request.Id);
+            var product = _context.Products
+                .Where(p => p.IsDeleted == false)
+                .FirstOrDefault(p => p.Id == request.Id);
 
             if (product == null)
             {

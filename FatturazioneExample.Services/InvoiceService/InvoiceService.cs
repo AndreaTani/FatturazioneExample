@@ -39,12 +39,19 @@ namespace FatturazioneExample.Services.InvoiceService
 
         public void DeleteInvoice(int id)
         {
-            var invoice = _context.Invoices.Find(id);
+            var invoice = _context.Invoices
+                .Where(i => i.IsDeleted == false)
+                .FirstOrDefault(i => i.Id == id);
+
             if (invoice is null)
             {
                 throw new Exception("Invoice not found!");
             }
-            _context.Invoices.Remove(invoice);
+
+            invoice.IsDeleted = true;
+            invoice.DeletionDate = DateTime.Now;
+
+            _context.Invoices.Update(invoice);
             _context.SaveChanges();
         }
 
@@ -53,6 +60,7 @@ namespace FatturazioneExample.Services.InvoiceService
             return _context.Invoices
                 .Include(i => i.Customer)
                 .Include(i => i.Products)
+                .Where(i => i.IsDeleted == false)
                 .ToList();
         }
 
@@ -61,6 +69,7 @@ namespace FatturazioneExample.Services.InvoiceService
             var invoice = _context.Invoices
                 .Include(i => i.Customer)
                 .Include(i => i.Products)
+                .Where(i => i.IsDeleted == false)
                 .FirstOrDefault(i => i.Id == id);
             if (invoice is null)
             {
@@ -74,6 +83,7 @@ namespace FatturazioneExample.Services.InvoiceService
             var invoice = _context.Invoices
                 .Include(i => i.Customer)
                 .Include(i => i.Products)
+                .Where(i => i.IsDeleted == false)
                 .FirstOrDefault(i => i.Id == request.Id);
             if (invoice is null)
             {
