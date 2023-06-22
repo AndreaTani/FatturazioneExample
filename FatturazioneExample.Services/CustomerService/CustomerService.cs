@@ -20,24 +20,35 @@ namespace FatturazioneExample.Services.CustomerService
 
         public void DeleteCustomer(int id)
         {
-            var customer = _context.Customers.Find(id);
+            var customer = _context.Customers
+                .Where(c => c.IsDeleted == false)
+                .FirstOrDefault(c => c.Id == id);
+
             if (customer is null)
             {
                 throw new Exception("Customer not found!");
             }
-            _context.Customers.Remove(customer);
 
+            customer.IsDeleted = true;
+            customer.DeletionDate = DateTime.Now;
+
+            _context.Customers.Update(customer);
             _context.SaveChanges();
         }
 
         public List<Customer> GetAllCustomers()
         {
-            return _context.Customers.ToList();
+            return _context.Customers
+                .Where(c => c.IsDeleted == false)
+                .ToList();
         }
 
         public Customer GetCustomer(int id)
         {
-            var customer = _context.Customers.Find(id);
+            var customer = _context.Customers
+                .Where(c => c.IsDeleted == false)
+                .FirstOrDefault(c => c.Id == id);
+
             if (customer is null)
             {
                 throw new Exception("Customer not found!");
@@ -52,7 +63,9 @@ namespace FatturazioneExample.Services.CustomerService
                 throw new Exception("Bad data");
             }
 
-            var customer = _context.Customers.Find(request.Id);
+            var customer = _context.Customers
+                .Where(c => c.IsDeleted == false)
+                .FirstOrDefault(c => c.Id == request.Id);
 
             if (customer == null)
             {
