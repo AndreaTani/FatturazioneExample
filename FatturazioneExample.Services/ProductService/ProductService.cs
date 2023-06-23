@@ -1,5 +1,6 @@
 ﻿using FatturazioneExample.Data.Data;
 using FatturazioneExample.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FatturazioneExample.Services.ProductService
 {
@@ -12,17 +13,17 @@ namespace FatturazioneExample.Services.ProductService
             _context = context;
         }
 
-        public void AddProduct(Product product)
+        public async Task AddProduct(Product product)
         {
             _context.Products.Add(product);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteProduct(int id)
+        public async Task DeleteProduct(int id)
         {
-            var product = _context.Products
+            var product = await _context.Products
                 .Where(p => p.IsDeleted == false)
-                .FirstOrDefault(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product is null)
             {
@@ -33,21 +34,21 @@ namespace FatturazioneExample.Services.ProductService
             product.DeletionDate = DateTime.Now;
 
             _context.Products.Update(product);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public List<Product> GetAllProducts()
+        public async Task<List<Product>> GetAllProducts()
         {
-            return _context.Products
+            return await _context.Products
                 .Where(p => p.IsDeleted == false)
-                .ToList();
+                .ToListAsync();
         }
 
-        public Product GetProduct(int id)
+        public async Task<Product> GetProduct(int id)
         {
-            var product = _context.Products
+            var product = await _context.Products
                 .Where(p => p.IsDeleted == false)
-                .FirstOrDefault(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null)
             {
@@ -56,11 +57,11 @@ namespace FatturazioneExample.Services.ProductService
             return product;
         }
 
-        public Product UpdateProduct(Product request)
+        public async Task<Product> UpdateProduct(Product request)
         {
-            var product = _context.Products
+            var product = await _context.Products
                 .Where(p => p.IsDeleted == false)
-                .FirstOrDefault(p => p.Id == request.Id);
+                .FirstOrDefaultAsync(p => p.Id == request.Id);
 
             if (product == null)
             {
@@ -71,7 +72,7 @@ namespace FatturazioneExample.Services.ProductService
             product.Price = request.Price;
 
             _context.Products.Update(product);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return product;
         }

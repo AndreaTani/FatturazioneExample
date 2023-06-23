@@ -16,16 +16,16 @@ namespace FatturazioneExample.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddInvoice(Invoice invoice)
+        public async Task<ActionResult> AddInvoice(Invoice invoice)
         {
-            _invoiceService.AddInvoice(invoice);
+            await _invoiceService.AddInvoice(invoice);
             return Ok();
         }
 
         [HttpGet]
-        public ActionResult<List<Invoice>> GetAllInvoices()
+        public async Task<ActionResult<List<Invoice>>> GetAllInvoices()
         {
-            var invoices = _invoiceService.GetAllInvoices();
+            var invoices = await _invoiceService.GetAllInvoices();
             if (invoices is null)
             {
                 return NotFound("Invoices not found!");
@@ -34,9 +34,9 @@ namespace FatturazioneExample.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Invoice> GetInvoice(int id)
+        public async Task<ActionResult<Invoice>> GetInvoice(int id)
         {
-            var invoice = _invoiceService.GetInvoice(id);
+            var invoice = await _invoiceService.GetInvoice(id);
             if (invoice is null)
             {
                 return NotFound("Invoice not found!");
@@ -45,9 +45,9 @@ namespace FatturazioneExample.API.Controllers
         }
 
         [HttpPut]
-        public ActionResult<Invoice> UpdateInvoice(Invoice request)
+        public async Task<ActionResult<Invoice>> UpdateInvoice(Invoice request)
         {
-            var invoice = _invoiceService.UpdateInvoice(request);
+            var invoice = await _invoiceService.UpdateInvoice(request);
             if (invoice is null)
             {
                 return NotFound("Invoice Not Found!");
@@ -56,9 +56,9 @@ namespace FatturazioneExample.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteInvoice(int id)
+        public async Task<ActionResult> DeleteInvoice(int id)
         {
-            _invoiceService.DeleteInvoice(id);
+            await _invoiceService.DeleteInvoice(id);
             return Ok();
         }
     }

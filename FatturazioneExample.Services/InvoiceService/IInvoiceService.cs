@@ -4,10 +4,10 @@ namespace FatturazioneExample.Services.InvoiceService
 {
     public interface IInvoiceService
     {
-        void AddInvoice(Invoice invoice);
-        List<Invoice> GetAllInvoices();
-        Invoice GetInvoice(int id);
-        Invoice UpdateInvoice(Invoice invoice);
-        void DeleteInvoice(int id);
+        Task AddInvoice(Invoice invoice);
+        Task<List<Invoice>> GetAllInvoices();
+        Task<Invoice> GetInvoice(int id);
+        Task<Invoice> UpdateInvoice(Invoice invoice);
+        Task DeleteInvoice(int id);
     }
 }

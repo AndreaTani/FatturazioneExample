@@ -16,16 +16,16 @@ namespace FatturazioneExample.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddProduct(Product product)
+        public async Task<ActionResult> AddProduct(Product product)
         {
-            _productService.AddProduct(product);
+            await _productService.AddProduct(product);
             return Ok();
         }
 
         [HttpGet]
-        public ActionResult<List<Product>> GetAllProducts()
+        public async Task<ActionResult<List<Product>>> GetAllProducts()
         {
-            var products = _productService.GetAllProducts();
+            var products = await _productService.GetAllProducts();
             if (products is null)
             {
                 return NotFound("Products not found");
@@ -34,9 +34,9 @@ namespace FatturazioneExample.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Product> GetProduct(int id)
+        public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = _productService.GetProduct(id);
+            var product = await _productService.GetProduct(id);
             if (product is null)
             {
                 return NotFound("Product not found!");
@@ -45,9 +45,9 @@ namespace FatturazioneExample.API.Controllers
         }
 
         [HttpPut]
-        public ActionResult<Product> UpdateProduct(Product request)
+        public async Task<ActionResult<Product>> UpdateProduct(Product request)
         {
-            var product = _productService.UpdateProduct(request);
+            var product = await _productService.UpdateProduct(request);
             if (product == null)
             {
                 return NotFound("Product not found!");
@@ -57,9 +57,9 @@ namespace FatturazioneExample.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteProduct(int id)
+        public async Task<ActionResult> DeleteProduct(int id)
         {
-            _productService.DeleteProduct(id);
+            await _productService.DeleteProduct(id);
             return Ok();
         }
     }

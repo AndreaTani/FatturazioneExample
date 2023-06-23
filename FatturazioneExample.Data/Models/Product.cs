@@ -8,7 +8,7 @@ namespace FatturazioneExample.Data.Models
         public string Name { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public DateTime? DeletionDate { get; set; }
+        public DateTime? DeletionDate { get; set; } = null;
 
 
         [JsonIgnore]

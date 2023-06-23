@@ -16,16 +16,16 @@ namespace FatturazioneExample.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddCustomer(Customer customer)
+        public async Task<ActionResult> AddCustomer(Customer customer)
         {
-            _customerService.AddCustomer(customer);
+            await _customerService.AddCustomer(customer);
             return Ok();
         }
 
         [HttpGet]
-        public ActionResult<List<Customer>> GetAllCustomers()
+        public async Task<ActionResult<List<Customer>>> GetAllCustomers()
         {
-            var customers = _customerService.GetAllCustomers();
+            var customers = await _customerService.GetAllCustomers();
             if (customers is null)
             {
                 return NotFound("Customers not found");
@@ -34,9 +34,9 @@ namespace FatturazioneExample.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Customer> GetCustomer(int id)
+        public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
-            var customer = _customerService.GetCustomer(id);
+            var customer = await _customerService.GetCustomer(id);
             if (customer is null)
             {
                 return NotFound("Customers not found");
@@ -45,9 +45,9 @@ namespace FatturazioneExample.API.Controllers
         }
 
         [HttpPut]
-        public ActionResult<Customer> UpdateCustomer(Customer request)
+        public async Task<ActionResult<Customer>> UpdateCustomer(Customer request)
         {
-            var customer = _customerService.UpdateCustomer(request);
+            var customer = await _customerService.UpdateCustomer(request);
             if (customer is null)
             {
                 return NotFound("Customers not found");
@@ -56,9 +56,9 @@ namespace FatturazioneExample.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteCustomer(int id)
+        public async Task<ActionResult> DeleteCustomer(int id)
         {
-            _customerService.DeleteCustomer(id);
+            await _customerService.DeleteCustomer(id);
             return Ok();
         }
 

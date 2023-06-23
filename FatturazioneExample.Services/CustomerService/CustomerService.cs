@@ -1,5 +1,6 @@
 ﻿using FatturazioneExample.Data.Data;
 using FatturazioneExample.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FatturazioneExample.Services.CustomerService
 {
@@ -12,17 +13,17 @@ namespace FatturazioneExample.Services.CustomerService
             _context = context;
         }
 
-        public void AddCustomer(Customer customer)
+        public async Task AddCustomer(Customer customer)
         {
             _context.Customers.Add(customer);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteCustomer(int id)
+        public async Task DeleteCustomer(int id)
         {
-            var customer = _context.Customers
+            var customer = await _context.Customers
                 .Where(c => c.IsDeleted == false)
-                .FirstOrDefault(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (customer is null)
             {
@@ -33,21 +34,21 @@ namespace FatturazioneExample.Services.CustomerService
             customer.DeletionDate = DateTime.Now;
 
             _context.Customers.Update(customer);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public List<Customer> GetAllCustomers()
+        public async Task<List<Customer>> GetAllCustomers()
         {
-            return _context.Customers
+            return await _context.Customers
                 .Where(c => c.IsDeleted == false)
-                .ToList();
+                .ToListAsync();
         }
 
-        public Customer GetCustomer(int id)
+        public async Task<Customer> GetCustomer(int id)
         {
-            var customer = _context.Customers
+            var customer = await _context.Customers
                 .Where(c => c.IsDeleted == false)
-                .FirstOrDefault(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (customer is null)
             {
@@ -56,16 +57,16 @@ namespace FatturazioneExample.Services.CustomerService
             return customer;
         }
 
-        public Customer UpdateCustomer(Customer request)
+        public async Task<Customer> UpdateCustomer(Customer request)
         {
             if (request is null)
             {
                 throw new Exception("Bad data");
             }
 
-            var customer = _context.Customers
+            var customer = await _context.Customers
                 .Where(c => c.IsDeleted == false)
-                .FirstOrDefault(c => c.Id == request.Id);
+                .FirstOrDefaultAsync(c => c.Id == request.Id);
 
             if (customer == null)
             {
@@ -76,7 +77,7 @@ namespace FatturazioneExample.Services.CustomerService
             customer.Address = request.Address;
 
             _context.Customers.Update(customer);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return customer;
         }

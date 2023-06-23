@@ -39,7 +39,7 @@ namespace FatturazioneExample.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("FatturazioneExample.Data.Models.Invoice", b =>
@@ -67,7 +67,7 @@ namespace FatturazioneExample.Data.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoices", (string)null);
                 });
 
             modelBuilder.Entity("FatturazioneExample.Data.Models.Product", b =>
@@ -91,7 +91,7 @@ namespace FatturazioneExample.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("InvoiceProduct", b =>
@@ -106,7 +106,7 @@ namespace FatturazioneExample.Data.Migrations
 
                     b.HasIndex("ProductsId");
 
-                    b.ToTable("InvoiceProduct");
+                    b.ToTable("InvoiceProduct", (string)null);
                 });
 
             modelBuilder.Entity("FatturazioneExample.Data.Models.Invoice", b =>

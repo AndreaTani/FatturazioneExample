@@ -12,17 +12,19 @@ namespace FatturazioneExample.Services.InvoiceService
         {
             _context = context;
         }
-        public void AddInvoice(Invoice invoice)
+
+        public async Task AddInvoice(Invoice invoice)
         {
             var customerId = invoice.Customer.Id;
-            var customer = _context.Customers.Find(customerId);
+            var customer = await _context.Customers.FindAsync(customerId);
             if (customer is not null)
             {
                 invoice.Customer = customer;
             }
 
             var products = invoice.Products;
-            var existingProducts = _context.Products.Where(p => products.Contains(p));
+            var allProducts = await _context.Products.ToListAsync();
+            var existingProducts = _context.Products.Where(p => allProducts.Contains(p));
 
             for (int i = 0; i < invoice.Products.Count; i++)
             {
@@ -34,14 +36,14 @@ namespace FatturazioneExample.Services.InvoiceService
             }
 
             _context.Invoices.Add(invoice);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteInvoice(int id)
+        public async Task DeleteInvoice(int id)
         {
-            var invoice = _context.Invoices
+            var invoice = await _context.Invoices
                 .Where(i => i.IsDeleted == false)
-                .FirstOrDefault(i => i.Id == id);
+                .FirstOrDefaultAsync(i => i.Id == id);
 
             if (invoice is null)
             {
@@ -52,25 +54,25 @@ namespace FatturazioneExample.Services.InvoiceService
             invoice.DeletionDate = DateTime.Now;
 
             _context.Invoices.Update(invoice);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public List<Invoice> GetAllInvoices()
+        public async Task<List<Invoice>> GetAllInvoices()
         {
-            return _context.Invoices
+            return await _context.Invoices
                 .Include(i => i.Customer)
                 .Include(i => i.Products)
                 .Where(i => i.IsDeleted == false)
-                .ToList();
+                .ToListAsync();
         }
 
-        public Invoice GetInvoice(int id)
+        public async Task<Invoice> GetInvoice(int id)
         {
-            var invoice = _context.Invoices
+            var invoice = await _context.Invoices
                 .Include(i => i.Customer)
                 .Include(i => i.Products)
                 .Where(i => i.IsDeleted == false)
-                .FirstOrDefault(i => i.Id == id);
+                .FirstOrDefaultAsync(i => i.Id == id);
             if (invoice is null)
             {
                 throw new Exception("Invoice not found!");
@@ -78,13 +80,13 @@ namespace FatturazioneExample.Services.InvoiceService
             return invoice;
         }
 
-        public Invoice UpdateInvoice(Invoice request)
+        public async Task<Invoice> UpdateInvoice(Invoice request)
         {
-            var invoice = _context.Invoices
+            var invoice = await _context.Invoices
                 .Include(i => i.Customer)
                 .Include(i => i.Products)
                 .Where(i => i.IsDeleted == false)
-                .FirstOrDefault(i => i.Id == request.Id);
+                .FirstOrDefaultAsync(i => i.Id == request.Id);
             if (invoice is null)
             {
                 throw new Exception("Invoice not found!");
@@ -100,11 +102,11 @@ namespace FatturazioneExample.Services.InvoiceService
             var productIds = request.Products.Select(p => p.Id).ToList();
 
             // Retrieve the existing products associated with the invoice
-            var existingProducts = _context.Products.Where(p => invoice.Products.Contains(p)).ToList();
+            var existingProducts = await _context.Products.Where(p => invoice.Products.Contains(p)).ToListAsync();
 
             // Check if the request contains any new products
             var newProductIds = productIds.Except(existingProducts.Select(p => p.Id)).ToList();
-            var newProducts = _context.Products.Where(p => newProductIds.Contains(p.Id)).ToList();
+            var newProducts = await _context.Products.Where(p => newProductIds.Contains(p.Id)).ToListAsync();
 
             // Check if any existing products are removed
             var removedProducts = existingProducts.Where(p => !productIds.Contains(p.Id)).ToList();
@@ -126,7 +128,7 @@ namespace FatturazioneExample.Services.InvoiceService
             invoice.HasBeenPaid = request.HasBeenPaid;
 
             _context.Invoices.Update(invoice);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return invoice;
         }
